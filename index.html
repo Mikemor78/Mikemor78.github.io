@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Micheal Monday — Digital Portrait Artist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #141210;
+    --ink-soft: #1e1b18;
+    --parchment: #EDE8DF;
+    --parchment-dim: #b8b2a6;
+    --brass: #B08D57;
+    --brass-bright: #cba86e;
+    --clay: #8C4A32;
+    --line: rgba(237, 232, 223, 0.14);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--parchment);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  ::selection { background: var(--brass); color: var(--ink); }
+
+  h1, h2, h3, .display {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ---------- NAV ---------- */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 32px;
+    mix-blend-mode: difference;
+  }
+
+  .nav-mark {
+    font-family: 'Fraunces', serif;
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .nav-links a { opacity: 0.75; transition: opacity 0.3s ease; }
+  .nav-links a:hover { opacity: 1; }
+
+  @media (max-width: 640px) {
+    .nav-links { gap: 20px; font-size: 0.7rem; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    min-height: 100svh;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: stretch;
+    position: relative;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .hero-copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 140px 56px 80px 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .eyebrow {
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--brass-bright);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 28px; height: 1px;
+    background: var(--brass-bright);
+  }
+
+  .hero-title {
+    font-size: clamp(2.6rem, 5.6vw, 4.6rem);
+    line-height: 1.02;
+    margin-bottom: 32px;
+    max-width: 13ch;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--brass-bright);
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: var(--parchment-dim);
+    max-width: 42ch;
+    margin-bottom: 44px;
+    font-weight: 300;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 16px 30px;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: 1px solid var(--parchment);
+    transition: all 0.35s cubic-bezier(.4,0,.2,1);
+    display: inline-block;
+  }
+
+  .btn-solid {
+    background: var(--parchment);
+    color: var(--ink);
+  }
+  .btn-solid:hover { background: var(--brass-bright); border-color: var(--brass-bright); }
+
+  .btn-ghost {
+    color: var(--parchment);
+  }
+  .btn-ghost:hover { background: var(--parchment); color: var(--ink); }
+
+  .hero-frame {
+    position: relative;
+    background: var(--ink-soft);
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    border-left: 1px solid var(--line);
+  }
+
+  .hero-frame-inner {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background:
+      repeating-linear-gradient(135deg, rgba(176,141,87,0.06) 0px, rgba(176,141,87,0.06) 1px, transparent 1px, transparent 14px),
+      linear-gradient(180deg, #221e1a 0%, #17140f 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: 40px 40px 0 0;
+    align-self: center;
+  }
+
+  .placeholder-label {
+    text-align: center;
+    color: var(--parchment-dim);
+  }
+  .placeholder-icon {
+    width: 44px; height: 44px;
+    margin: 0 auto 16px;
+    border: 1px solid var(--parchment-dim);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+  }
+  .placeholder-label span {
+    display: block;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  .hero-frame-corner {
+    position: absolute;
+    top: -1px; left: -1px;
+    width: 22px; height: 22px;
+    border-top: 1px solid var(--brass);
+    border-left: 1px solid var(--brass);
+  }
+  .hero-frame-corner.br {
+    top: auto; left: auto; bottom: -1px; right: -1px;
+    border-top: none; border-left: none;
+    border-bottom: 1px solid var(--brass);
+    border-right: 1px solid var(--brass);
+  }
+
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-copy { padding: 130px 24px 40px; }
+    .hero-frame { border-left: none; border-top: 1px solid var(--line); padding-bottom: 60px; }
+    .hero-frame-inner { margin: 40px 24px 0; max-width: 320px; }
+  }
+
+  /* ---------- MARQUEE STRIP ---------- */
+  .strip {
+    border-bottom: 1px solid var(--line);
+    padding: 18px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .strip-track {
+    display: inline-flex;
+    animation: scroll 32s linear infinite;
+  }
+  .strip-track span {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--parchment-dim);
+    padding: 0 28px;
+    display: inline-flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .strip-track span::after {
+    content: '✦';
+    font-style: normal;
+    color: var(--brass);
+    font-size: 0.8rem;
+  }
+  @keyframes scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ---------- SECTION SHARED ---------- */
+  section { padding: 120px 0; border-bottom: 1px solid var(--line); }
+
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 64px;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .section-num {
+    font-size: 0.78rem;
+    color: var(--brass-bright);
+    letter-spacing: 0.1em;
+    margin-bottom: 18px;
+    display: block;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 4vw, 2.9rem);
+    max-width: 16ch;
+  }
+
+  .section-desc {
+    max-width: 34ch;
+    color: var(--parchment-dim);
+    font-size: 0.98rem;
+    line-height: 1.6;
+  }
+
+  /* ---------- GALLERY ---------- */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--line);
+  }
+
+  .gallery-item {
+    background: var(--ink-soft);
+    aspect-ratio: 4/5;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .gallery-item:nth-child(3n+2) { aspect-ratio: 4/5; }
+  .gallery-item.tall { grid-row: span 2; aspect-ratio: 4/10; }
+
+  .gallery-item::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(160deg, rgba(176,141,87,0.05), transparent 60%);
+    transition: opacity 0.4s ease;
+  }
+
+  .gallery-item .g-label {
+    text-align: center;
+    color: var(--parchment-dim);
+    transition: transform 0.4s cubic-bezier(.4,0,.2,1), color 0.4s ease;
+    z-index: 1;
+  }
+  .gallery-item .g-num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.6rem;
+    color: var(--brass);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .gallery-item .g-tag {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .gallery-item:hover {
+    background: #26211b;
+  }
+  .gallery-item:hover .g-label {
+    transform: translateY(-6px);
+    color: var(--parchment);
+  }
+
+  @media (max-width: 780px) {
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    .gallery-item.tall { grid-row: span 1; aspect-ratio: 4/5; }
+  }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 72px;
+    align-items: start;
+  }
+
+  .about-portrait {
+    aspect-ratio: 4/5;
+    background: linear-gradient(180deg, #221e1a, #17140f);
+    border: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    top: 120px;
+  }
+
+  .about-copy p {
+    font-size: 1.15rem;
+    line-height: 1.75;
+    color: var(--parchment-dim);
+    margin-bottom: 28px;
+    font-weight: 300;
+  }
+  .about-copy p strong {
+    color: var(--parchment);
+    font-weight: 400;
+  }
+  .about-copy p:first-child {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem;
+    color: var(--parchment);
+    line-height: 1.5;
+  }
+
+  .about-facts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 56px;
+    padding-top: 44px;
+    border-top: 1px solid var(--line);
+  }
+  .fact-num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 2.4rem;
+    color: var(--brass-bright);
+    display: block;
+    margin-bottom: 6px;
+  }
+  .fact-label {
+    font-size: 0.76rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--parchment-dim);
+  }
+
+  @media (max-width: 860px) {
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .about-portrait { position: static; max-width: 280px; }
+    .about-facts { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  }
+
+  /* ---------- PROCESS ---------- */
+  .process-list { display: flex; flex-direction: column; }
+  .process-row {
+    display: grid;
+    grid-template-columns: 90px 1fr 1fr;
+    gap: 32px;
+    padding: 36px 0;
+    border-top: 1px solid var(--line);
+    align-items: baseline;
+  }
+  .process-row:last-child { border-bottom: 1px solid var(--line); }
+  .process-tag {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--brass);
+    font-size: 1rem;
+  }
+  .process-name {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem;
+  }
+  .process-desc {
+    color: var(--parchment-dim);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 700px) {
+    .process-row { grid-template-columns: 1fr; gap: 10px; padding: 28px 0; }
+  }
+
+  /* ---------- COMMISSION / CTA ---------- */
+  .cta {
+    background: var(--ink-soft);
+    text-align: center;
+    padding: 140px 0;
+  }
+  .cta-title {
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    max-width: 16ch;
+    margin: 0 auto 24px;
+  }
+  .cta-title em { font-style: italic; color: var(--brass-bright); }
+  .cta-sub {
+    color: var(--parchment-dim);
+    max-width: 46ch;
+    margin: 0 auto 48px;
+    font-size: 1.05rem;
+    line-height: 1.65;
+  }
+  .cta-tiers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    max-width: 900px;
+    margin: 0 auto 56px;
+    text-align: left;
+  }
+  .tier {
+    background: var(--ink-soft);
+    padding: 36px 28px;
+  }
+  .tier-name {
+    font-family: 'Fraunces', serif;
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+  }
+  .tier-desc {
+    font-size: 0.88rem;
+    color: var(--parchment-dim);
+    line-height: 1.55;
+  }
+  @media (max-width: 780px) {
+    .cta-tiers { grid-template-columns: 1fr; }
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    padding: 56px 0 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .footer-mark {
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem;
+  }
+  .footer-links {
+    display: flex;
+    gap: 28px;
+    font-size: 0.82rem;
+    color: var(--parchment-dim);
+  }
+  .footer-links a:hover { color: var(--brass-bright); }
+  .footer-meta {
+    font-size: 0.76rem;
+    color: var(--parchment-dim);
+    letter-spacing: 0.02em;
+  }
+
+  /* reveal on scroll */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s cubic-bezier(.4,0,.2,1), transform 0.8s cubic-bezier(.4,0,.2,1);
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .strip-track { animation: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--brass-bright);
+    outline-offset: 3px;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-mark">Micheal Monday</div>
+  <div class="nav-links">
+    <a href="#work">Work</a>
+    <a href="#about">About</a>
+    <a href="#process">Process</a>
+    <a href="#commission">Commission</a>
+  </div>
+</nav>
+
+<section class="hero" style="border-bottom: 1px solid var(--line); padding: 0;">
+  <div class="hero-copy">
+    <span class="eyebrow">Digital Portrait Artist — Abuja, Nigeria</span>
+    <h1 class="hero-title">Faces, rendered <em>layer by layer</em>, until they breathe.</h1>
+    <p class="hero-sub">I build portraits from scratch on screen — no filters doing the work for me. Just patient, deliberate mark-making translated into pixels, for clients who want more than a photograph.</p>
+    <div class="hero-actions">
+      <a href="#commission" class="btn btn-solid">Book a commission</a>
+      <a href="#work" class="btn btn-ghost">View the work</a>
+    </div>
+  </div>
+  <div class="hero-frame">
+    <div class="hero-frame-inner">
+      <div class="hero-frame-corner"></div>
+      <div class="hero-frame-corner br"></div>
+      <div class="placeholder-label">
+        <div class="placeholder-icon">M</div>
+        <span>Hero portrait<br>replace this frame</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="strip">
+  <div class="strip-track">
+    <span>Portraits</span><span>Character studies</span><span>Editorial commissions</span><span>Digital painting</span>
+    <span>Portraits</span><span>Character studies</span><span>Editorial commissions</span><span>Digital painting</span>
+  </div>
+</div>
+
+<section id="work">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="section-num">01 — Selected Work</span>
+        <h2 class="section-title">A gallery of faces, not a feed.</h2>
+      </div>
+      <p class="section-desc">Nine slots below — swap each placeholder for a finished portrait. Mix close crops with fuller compositions so the grid has rhythm.</p>
+    </div>
+
+    <div class="gallery-grid reveal">
+      <div class="gallery-item tall"><div class="g-label"><span class="g-num">01</span><span class="g-tag">Portrait — tall</span></div></div>
+      <div class="gallery-item"><div class="g-label"><span class="g-num">02</span><span class="g-tag">Portrait</span></div></div>
+      <div class="gallery-item"><div class="g-label"><span class="g-num">03</span><span class="g-tag">Portrait</span></div></div>
+      <div class="gallery-item"><div class="g-label"><span class="g-num">04</span><span class="g-tag">Portrait</span></div></div>
+      <div class="gallery-item"><div class="g-label"><span class="g-num">05</span><span class="g-tag">Portrait</span></div></div>
+      <div class="gallery-item tall"><div class="g-label"><span class="g-num">06</span><span class="g-tag">Portrait — tall</span></div></div>
+      <div class="gallery-item"><div class="g-label"><span class="g-num">07</span><span class="g-tag">Portrait</span></div></div>
+      <div class="gallery-item"><div class="g-label"><span class="g-num">08</span><span class="g-tag">Portrait</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="section-num">02 — About</span>
+        <h2 class="section-title">The hand behind the pixels.</h2>
+      </div>
+    </div>
+
+    <div class="about-grid reveal">
+      <div class="about-portrait">
+        <div class="placeholder-label">
+          <div class="placeholder-icon">M</div>
+          <span>Studio portrait<br>of the artist</span>
+        </div>
+      </div>
+      <div class="about-copy">
+        <p>I'm Micheal — a digital portrait artist working out of Abuja, Nigeria.</p>
+        <p>I turn everyday faces into striking pieces of art, capturing not just likeness but the <strong>mood and personality</strong> behind every subject. What started as a passion has grown into a craft I take seriously: every piece is built from scratch, layer by layer, until it feels alive on screen.</p>
+        <p>No shortcuts, no filters doing the work for me — just skill, patience, and an eye for detail. I work with clients across Nigeria and beyond, creating custom portraits for personal keepsakes, gifts, and brand projects.</p>
+        <p>If you've got a face worth immortalizing, I've got the hands for it.</p>
+
+        <div class="about-facts">
+          <div>
+            <span class="fact-num">32+</span>
+            <span class="fact-label">Pieces shared</span>
+          </div>
+          <div>
+            <span class="fact-num">3.6K</span>
+            <span class="fact-label">Following the work</span>
+          </div>
+          <div>
+            <span class="fact-num">NG</span>
+            <span class="fact-label">Abuja, Nigeria</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="section-num">03 — Process</span>
+        <h2 class="section-title">How a portrait gets built.</h2>
+      </div>
+      <p class="section-desc">Every commission moves through the same four stages — edit the copy to match how you actually work.</p>
+    </div>
+
+    <div class="process-list reveal">
+      <div class="process-row">
+        <span class="process-tag">i.</span>
+        <span class="process-name">Reference &amp; brief</span>
+        <span class="process-desc">You send photos and tell me the mood you want — warm, formal, playful, dramatic. We agree on crop and format.</span>
+      </div>
+      <div class="process-row">
+        <span class="process-tag">ii.</span>
+        <span class="process-name">Sketch pass</span>
+        <span class="process-desc">A rough layout to lock proportions and expression before any rendering begins. You approve before I go further.</span>
+      </div>
+      <div class="process-row">
+        <span class="process-tag">iii.</span>
+        <span class="process-name">Layer &amp; render</span>
+        <span class="process-desc">The bulk of the work — building form, light, and texture layer by layer until the piece feels alive.</span>
+      </div>
+      <div class="process-row">
+        <span class="process-tag">iv.</span>
+        <span class="process-name">Finishing &amp; delivery</span>
+        <span class="process-desc">Final detail pass, color correction, and delivery in high resolution — print-ready if you need it.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="commission" class="cta" style="border-bottom: 1px solid var(--line);">
+  <div class="wrap">
+    <span class="section-num reveal" style="justify-content:center; display:flex;">04 — Commission</span>
+    <h2 class="cta-title reveal">Have a face worth <em>immortalizing?</em></h2>
+    <p class="cta-sub reveal">Portraits for personal keepsakes, gifts, and brand projects. Every piece is custom — tell me who it's for and I'll take it from there.</p>
+
+    <div class="cta-tiers reveal">
+      <div class="tier">
+        <div class="tier-name">Single Portrait</div>
+        <div class="tier-desc">One subject, close-crop, digitally rendered. Ideal for a personal keepsake or gift.</div>
+      </div>
+      <div class="tier">
+        <div class="tier-name">Full Composition</div>
+        <div class="tier-desc">Fuller scene, added detail and background. For a statement piece.</div>
+      </div>
+      <div class="tier">
+        <div class="tier-name">Brand / Editorial</div>
+        <div class="tier-desc">Portraits for campaigns, covers, or brand storytelling. Scoped per project.</div>
+      </div>
+    </div>
+
+    <a href="mailto:mikemor78@gmail.com" class="btn btn-solid reveal">Start a commission — mikemor78@gmail.com</a>
+  </div>
+</section>
+
+<footer class="wrap">
+  <div class="footer-mark">Micheal Monday</div>
+  <div class="footer-links">
+    <a href="https://instagram.com/Mondaymichael78" target="_blank" rel="noopener">Instagram</a>
+    <a href="mailto:mikemor78@gmail.com">Email</a>
+    <a href="#commission">Commission</a>
+  </div>
+  <div class="footer-meta">Abuja, Nigeria — Digital Portrait Artist</div>
+</footer>
+
+<script>
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
